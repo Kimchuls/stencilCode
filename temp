@@ -1,0 +1,4 @@
+#!/bin/bash
+
+bash compile_commands
+./stencil 3 3 5 1 1 1 30 > ./ansfile1/test.txt
