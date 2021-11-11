@@ -87,18 +87,18 @@ void StencilProbe(double *A00, double *Anext0, int nx, int ny, int nz,
             //                                            +A0[Index3D (nx, ny, i, j+ 1, k)]+A0[Index3D (nx, ny, i, j- 1, k)]
             //                                            +A0[Index3D (nx, ny, i, j, k+ 1)]+A0[Index3D (nx, ny, i, j, k- 1)]);
 
-            // Anext[Index3D (nx, ny, i, j, k)] = 1/7.0*(A0[Index3D (nx, ny, i, j, k)]
-            //                                    +A0[Index3D (nx, ny, i + 1, j, k)]+A0[Index3D (nx, ny, i - 1, j, k)]
-            //                                    +A0[Index3D (nx, ny, i, j+ 1, k)]+A0[Index3D (nx, ny, i, j- 1, k)]
-            //                                    +A0[Index3D (nx, ny, i, j, k+ 1)]+A0[Index3D (nx, ny, i, j, k- 1)]);
+             Anext[Index3D (nx, ny, i, j, k)] = 1/7.0*(A0[Index3D (nx, ny, i, j, k)]
+                                                +A0[Index3D (nx, ny, i + 1, j, k)]+A0[Index3D (nx, ny, i - 1, j, k)]
+                                                +A0[Index3D (nx, ny, i, j+ 1, k)]+A0[Index3D (nx, ny, i, j- 1, k)]
+                                                +A0[Index3D (nx, ny, i, j, k+ 1)]+A0[Index3D (nx, ny, i, j, k- 1)]);
             //G stencil;
-            Anext[Index3D (nx, ny, i, j, k)] = 1/sqrt(EPSILON +
-(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i, j+1, k)])*(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i, j+1, k)]) +
-(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i, j-1, k)])*(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i, j-1, k)]) +
-(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i, j, k+1)])*(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i, j, k+1)]) +
-(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i, j, k-1)])*(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i, j, k-1)]) +
-(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i+1, j, k)])*(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i+1, j, k)]) +
-(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i-1, j, k)])*(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i-1, j, k)]));                                  
+//            Anext[Index3D (nx, ny, i, j, k)] = 1/sqrt(EPSILON +
+//(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i, j+1, k)])*(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i, j+1, k)]) +
+//(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i, j-1, k)])*(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i, j-1, k)]) +
+//(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i, j, k+1)])*(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i, j, k+1)]) +
+//(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i, j, k-1)])*(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i, j, k-1)]) +
+//(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i+1, j, k)])*(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i+1, j, k)]) +
+//(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i-1, j, k)])*(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i-1, j, k)]));
             // printf("Anext[Index3D (nx, ny, i, j, k)] = %.26lf\n",Anext[Index3D (nx, ny, i, j, k)] );
           }
         }

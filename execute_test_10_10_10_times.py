@@ -3,7 +3,7 @@ import os
 
 filepath = "./fault_injector.config"
 
-iters = 1500
+iters = 3000
 steps = 15
 
 
@@ -19,7 +19,7 @@ def changeVariable(folder):
         os.mknod("./{0}/loadfile.txt".format(folder))
     writefile = open("./{0}/loadfile.txt".format(folder), "w")
     var = 0
-    x = y = z = 10
+    x, y, z = 130, 130, 100
 
     compressor = 1
     SZerrorBoundMode = "REL"
@@ -91,7 +91,7 @@ if __name__ == '__main__':
     # parser.add_argument("-p4", "--parameter_4", type=int, default=3)
     # parser.add_argument("-p5", "--parameter_5", type=int, default=3)
     # parser.add_argument("-p6", "--parameter_6", type=int, default=3)
-    parser.add_argument("-f", "--folder", default="ansfile3")
+    parser.add_argument("-f", "--folder", default="ansfile0")
     args = parser.parse_args()
     os.system("bash compile_commands")
     changeVariable(args.folder)
