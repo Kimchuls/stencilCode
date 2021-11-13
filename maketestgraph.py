@@ -64,7 +64,7 @@ def do(f, id, v):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("-v", "--v", type=int, default=3000)
+    parser.add_argument("-v", "--v", type=int, default=300)
     parser.add_argument("-f", "--f", default='./ansfile0')
     args = parser.parse_args()
     f = args.f

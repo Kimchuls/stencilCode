@@ -6,14 +6,16 @@
 #include "common.h"
 #include "SZ_fault_generator.h"
 const double EPSILON = 1.0E-20;
-#define min(x,y) (x)<(y)?(x):(y)
+#define min(x, y) (x) < (y) ? (x) : (y)
 
 #ifdef STENCILTEST
 void StencilProbe_naive(double *A00, double *Anext0, int nx, int ny, int nz,
-                        int tx, int ty, int tz, int timesteps) {
+                        int tx, int ty, int tz, int timesteps)
+{
 #else
 void StencilProbe(double *A00, double *Anext0, int nx, int ny, int nz,
-                  int tx, int ty, int tz, int timesteps) {
+                  int tx, int ty, int tz, int timesteps)
+{
 #endif
   // Fool compiler so it doesn't insert a constant here
   // double fac = A0[0];
@@ -33,48 +35,36 @@ void StencilProbe(double *A00, double *Anext0, int nx, int ny, int nz,
   Anext = (double *)malloc(sizeof(double) * nx * ny * nz);
   A0 = (double *)malloc(sizeof(double) * nx * ny * nz);
   // for (timeNow = 0; timeNow <= timesteps; timeNow += step) {
-  for (timeNow = 15; timeNow <= timesteps; timeNow += timesteps-15) {
-    for (i = 0; i < nz * nx * ny; i++) {
+  for (timeNow = 15; timeNow <= timesteps; timeNow += timesteps - 15)
+  {
+    for (i = 0; i < nz * nx * ny; i++)
+    {
       A0[i] = A00[i];
     }
-    for (i = 0; i < nz * nx * ny; i++) {
+    for (i = 0; i < nz * nx * ny; i++)
+    {
       Anext[i] = Anext0[i];
     }
     printf("******* Injected Iters: %d *******\n", timeNow);
-    for (t = 0; t < timesteps; t++) {
-      if (timeNow == t) {
-        // printf("#0 timestep = %d,\n", t);
-        // printf("A0,");
-        // for (k = 1 - 1; k < nz ; k++)
-        //   for (j = 1 - 1; j < ny ; j++)
-        //     for (i = 1 - 1; i < nx ; i++)
-        //       printf("%.25lf,", A0[Index3D (nx, ny, i, j, k)]);
-        // printf("\n");
-        // printf("Anext,");
-        // for (k = 1 - 1; k < nz ; k++)
-        //   for (j = 1 - 1; j < ny ; j++)
-        //     for (i = 1 - 1; i < nx ; i++)
-        //       printf("%.25lf,", Anext[Index3D (nx, ny, i, j, k)]);
-        // printf("\n");
-
+    for (t = 0; t <= timesteps; t++)
+    {
+      if (timeNow == t)
+      {
         double *temp_A0 = (double *)malloc(nz * nx * ny * sizeof(double));
         temp_A0 = SZ_fault_generator_1D(nz * nx * ny, A0); // SZ fault generated!
-        for (i = 0; i < nz * nx * ny; i++) {
+        for (i = 0; i < nz * nx * ny; i++)
+        {
           A0[i] = temp_A0[i];
           Anext[i] = temp_A0[i];
         }
         free(temp_A0);
-
-        // double *temp_Anext = (double *)malloc(nz * nx * ny * sizeof(double));
-        // temp_Anext = SZ_fault_generator_1D(nz * nx * ny, Anext); // SZ fault generated!
-        // for (i = 0; i < nz * nx * ny; i++) {
-        //   Anext[i] = temp_Anext[i];
-        // }
-        // free(temp_Anext);
       }
-      for (k = 1; k < nz - 1; k++) {
-        for (j = 1; j < ny - 1; j++) {
-          for (i = 1; i < nx - 1; i++) {
+      for (k = 1; k < nz - 1; k++)
+      {
+        for (j = 1; j < ny - 1; j++)
+        {
+          for (i = 1; i < nx - 1; i++)
+          {
             // printf("now space is z=%d, y=%d, x=%d:\n",k,j,i);
 
             // Anext[Index3D (nx, ny, i, j, k)] = (1 - 6 * fac) * A0[Index3D (nx, ny, i, j, k)]
@@ -87,18 +77,15 @@ void StencilProbe(double *A00, double *Anext0, int nx, int ny, int nz,
             //                                            +A0[Index3D (nx, ny, i, j+ 1, k)]+A0[Index3D (nx, ny, i, j- 1, k)]
             //                                            +A0[Index3D (nx, ny, i, j, k+ 1)]+A0[Index3D (nx, ny, i, j, k- 1)]);
 
-             Anext[Index3D (nx, ny, i, j, k)] = 1/7.0*(A0[Index3D (nx, ny, i, j, k)]
-                                                +A0[Index3D (nx, ny, i + 1, j, k)]+A0[Index3D (nx, ny, i - 1, j, k)]
-                                                +A0[Index3D (nx, ny, i, j+ 1, k)]+A0[Index3D (nx, ny, i, j- 1, k)]
-                                                +A0[Index3D (nx, ny, i, j, k+ 1)]+A0[Index3D (nx, ny, i, j, k- 1)]);
+            Anext[Index3D(nx, ny, i, j, k)] = 1 / 7.0 * (A0[Index3D(nx, ny, i, j, k)] + A0[Index3D(nx, ny, i + 1, j, k)] + A0[Index3D(nx, ny, i - 1, j, k)] + A0[Index3D(nx, ny, i, j + 1, k)] + A0[Index3D(nx, ny, i, j - 1, k)] + A0[Index3D(nx, ny, i, j, k + 1)] + A0[Index3D(nx, ny, i, j, k - 1)]);
             //G stencil;
-//            Anext[Index3D (nx, ny, i, j, k)] = 1/sqrt(EPSILON +
-//(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i, j+1, k)])*(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i, j+1, k)]) +
-//(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i, j-1, k)])*(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i, j-1, k)]) +
-//(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i, j, k+1)])*(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i, j, k+1)]) +
-//(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i, j, k-1)])*(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i, j, k-1)]) +
-//(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i+1, j, k)])*(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i+1, j, k)]) +
-//(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i-1, j, k)])*(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i-1, j, k)]));
+            //            Anext[Index3D (nx, ny, i, j, k)] = 1/sqrt(EPSILON +
+            //(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i, j+1, k)])*(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i, j+1, k)]) +
+            //(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i, j-1, k)])*(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i, j-1, k)]) +
+            //(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i, j, k+1)])*(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i, j, k+1)]) +
+            //(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i, j, k-1)])*(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i, j, k-1)]) +
+            //(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i+1, j, k)])*(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i+1, j, k)]) +
+            //(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i-1, j, k)])*(A0[Index3D (nx, ny, i, j, k)] - A0[Index3D (nx, ny, i-1, j, k)]));
             // printf("Anext[Index3D (nx, ny, i, j, k)] = %.26lf\n",Anext[Index3D (nx, ny, i, j, k)] );
           }
         }
@@ -106,21 +93,23 @@ void StencilProbe(double *A00, double *Anext0, int nx, int ny, int nz,
       temp_ptr = A0;
       A0 = Anext;
       Anext = temp_ptr;
-      printf("timestep = %d,", t);
-      for (k = 1 - 1; k < nz ; k++)
-        for (j = 1 - 1; j < ny ; j++)
-          for (i = 1 - 1; i < nx ; i++)
-            printf("%.25lf,", A0[Index3D (nx, ny, i, j, k)]);
-      printf("\n");
+      if (t % 10 == 0)
+      {
+        printf("timestep = %d,", t);
+        for (k = 1 - 1; k < nz; k++)
+          for (j = 1 - 1; j < ny; j++)
+            for (i = 1 - 1; i < nx; i++)
+              printf("%.25lf,", A0[Index3D(nx, ny, i, j, k)]);
+        printf("\n");
+      }
     }
-    printf("timestep = %d,", t);
-    for (k = 1 - 1; k < nz ; k++)
-      for (j = 1 - 1; j < ny ; j++)
-        for (i = 1 - 1; i < nx ; i++)
-          printf("%.25lf,", A0[Index3D (nx, ny, i, j, k)]);
-    printf("\n");
+    // printf("timestep = %d,", t);
+    // for (k = 1 - 1; k < nz ; k++)
+    //   for (j = 1 - 1; j < ny ; j++)
+    //     for (i = 1 - 1; i < nx ; i++)
+    //       printf("%.25lf,", A0[Index3D (nx, ny, i, j, k)]);
+    // printf("\n");
   }
   free(Anext);
   free(A0);
-
 }

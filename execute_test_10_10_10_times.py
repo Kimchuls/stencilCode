@@ -11,8 +11,7 @@ def countErrorBound(count):
     return "{0}E-1".format(count)
 
 
-
-def changeVariable(folder):
+def changeVariable(folder, t):
     if not os.path.exists("{0}".format(folder)):
         os.mkdir("{0}".format(folder))
     if not os.path.exists("./{0}/loadfile.txt".format(folder)):
@@ -43,7 +42,7 @@ def changeVariable(folder):
           + "compressor = {0}, ".format(compressor) \
           + "SZerrorBoundMode_{0}, ".format(SZerrorBoundMode) \
           + "SZErrorBound = {0}".format(countErrorBound(etype))
-    for trial in range(1, 11):
+    for trial in range(1, t+1):
         print(log)
         writefile.write("TRIAL = {0}, ".format(trial) + log + "\n")
         var += 1
@@ -92,9 +91,10 @@ if __name__ == '__main__':
     # parser.add_argument("-p5", "--parameter_5", type=int, default=3)
     # parser.add_argument("-p6", "--parameter_6", type=int, default=3)
     parser.add_argument("-f", "--folder", default="ansfile0")
+    parser.add_argument("-t", "--times", type=int, default=3)
     args = parser.parse_args()
     os.system("bash compile_commands")
-    changeVariable(args.folder)
+    changeVariable(args.folder, args.times)
     # if args.type == 0:
     #     changeVariable(3, 3, 3, 3, 3, args.parameter_3, args.folder)
     # elif args.type == 1:
