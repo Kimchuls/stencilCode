@@ -47,17 +47,17 @@ def train_LINEAR(fileList, noList, inputPath, outputPath):
         lines = readFile.readlines()
         for iter1 in range(2):
             list1 = []
-            i = float(
+            start = float(
                 lines[2 + (outputLeng + 1) * iter1].replace("******* Injected Iters: ", "").replace(" *******\n", ""))
             for j in range(outputLeng):
                 lineNumber = 2 + (outputLeng + 1) * iter1 + 1 + j
                 line = lines[lineNumber]
                 list3 = line.split(",")[1:-1]
 
-                list2 = [j / float(outputLeng - 1), i / float(outputLeng - 1),
+                list2 = [j / float(outputLeng - 1), start / float(outputLeng - 1),
                          y_origin] + [float(x) for x in list3]
                 list1.append(list2)
-            for i in range(0, outputLeng, outputRound):
+            for i in range(start, outputLeng, outputRound):
                 if i + outputTo - 1 >= outputLeng:
                     break
                 item_dataSet = list1[i:i + outputFrom]
@@ -86,18 +86,18 @@ def test_LINEAR(fileList, noList, inputPath, outputPath):
         lines = readFile.readlines()
         for iter1 in range(injectnum):
             list1 = []
-            i = float(
+            start = float(
                 lines[2 + (outputLeng + 1) * iter1].replace("******* Injected Iters: ", "").replace(" *******\n", ""))
             for j in range(outputLeng):
                 lineNumber = 2 + (outputLeng + 1) * iter1 + 1 + j
                 line = lines[lineNumber]
                 list3 = line.split(",")[1:-1]
 
-                list2 = [j / float(outputLeng - 1), i / float(outputLeng - 1),
+                list2 = [j / float(outputLeng - 1), start / float(outputLeng - 1),
                          y_origin] + [float(x) for x in list3]
                 list1.append(list2)
 
-            for i in range(0, outputLeng, outputRound):
+            for i in range(start, outputLeng, outputRound):
                 if i + outputTo - 1 >= outputLeng:
                     break
                 item_dataSet = list1[i:i + outputFrom]
