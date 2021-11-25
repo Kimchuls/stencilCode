@@ -19,7 +19,7 @@ typedef struct Fault_Injector_ConfigsSt
     // inject faults in which iterations.
     //     In CoMD, the injected iteration should
     //     be divisible by 10!!!!!!!
-    int iters, steps; 
+    int iters, step1,step2; 
     
     // Descriptions about lossy compressor:
     //     compressor = 1 -> SZ
@@ -185,12 +185,20 @@ Fault_Injector_Configs read_fault_injector_config()
                 config.iters = atoi(temp2);
             }
 
-            // Get config.steps from given .config file.
-            if(strstr(temp1, "steps="))
+            // Get config.step1 from given .config file.
+            if(strstr(temp1, "step1="))
             {
                 char *temp2 = strstr(temp1, "=");
                 temp2++;
-                config.steps = atoi(temp2);
+                config.step1 = atoi(temp2);
+            }
+
+            // Get config.step2 from given .config file.
+            if(strstr(temp1, "step2="))
+            {
+                char *temp2 = strstr(temp1, "=");
+                temp2++;
+                config.step2 = atoi(temp2);
             }
 
             // Get config.compressor from given .config file.

@@ -29,14 +29,20 @@ void StencilProbe(double *A00, double *Anext0, int nx, int ny, int nz,
   printf("####### EM: %s, EB: %s #######\n", fi_config.error_type, fi_config.error_bound_ch);
 
   timesteps = fi_config.iters;
-  int timeNow = 0, step = fi_config.steps;
+  int timeNow = 0, step1 = fi_config.step1, step2 = fi_config.step2;
+  
   double *Anext;
   double *A0;
   Anext = (double *)malloc(sizeof(double) * nx * ny * nz);
   A0 = (double *)malloc(sizeof(double) * nx * ny * nz);
   // for (timeNow = 0; timeNow <= timesteps; timeNow += step) {
-  for (timeNow = 15; timeNow <= timesteps; timeNow += timesteps - 15)
+  for (timeNow = step1; timeNow <= timesteps; timeNow += step2)
   {
+    if (timeNow != step1 && timeNow != timesteps){
+      step2 = timesteps - timeNow;
+      printf("%d %d %d\n",timeNow,step1,step2);
+    }
+    
     for (i = 0; i < nz * nx * ny; i++)
     {
       A0[i] = A00[i];
