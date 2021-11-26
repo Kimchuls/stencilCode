@@ -47,7 +47,7 @@ def train_LSTM(fileList, noList, inputPath, outputPath):
         lines = readFile.readlines()
         for iter1 in range(2):
             list1 = []
-            start = float(
+            start = int(
                 lines[2 + (outputLeng + 1) * iter1].replace("******* Injected Iters: ", "").replace(" *******\n", ""))
             for j in range(outputLeng):
                 lineNumber = 2 + (outputLeng + 1) * iter1 + 1 + j
@@ -88,7 +88,7 @@ def test_LSTM(fileList, noList, inputPath, outputPath):
         lines = readFile.readlines()
         for iter1 in range(injectnum):
             list1 = []
-            start = float(
+            start = int(
                 lines[2 + (outputLeng + 1) * iter1].replace("******* Injected Iters: ", "").replace(" *******\n", ""))
             for j in range(outputLeng):
                 lineNumber = 2 + (outputLeng + 1) * iter1 + 1 + j
@@ -158,4 +158,4 @@ if __name__ == '__main__':
     outputLeng, outputFrom, outputTo, outputRound, testmode, injectnum = args.inputlength, args.prefrom, args.preto, args.preround, args.testmode, args.injectnum
 
     train_LSTM(trainItems, args.trainputno, args.traininput, args.trainoutput)
-    test_LSTM(testItems, args.testputno, args.testinput, args.testoutput)
+    test_LSTM(testItems, args.testinputno, args.testinput, args.testoutput)
