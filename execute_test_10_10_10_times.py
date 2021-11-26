@@ -51,14 +51,14 @@ def changeVariable(folder, x, y, z, t):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process some integers.')
     # parser.add_argument("-t", "--type", type=int, default=0)
-    parser.add_argument("-p1", "--parameter_1", type=int, default=10)
-    parser.add_argument("-p2", "--parameter_2", type=int, default=10)
-    parser.add_argument("-p3", "--parameter_3", type=int, default=10)
-    parser.add_argument("-it", "--iters", type=int, default=150)
-    parser.add_argument("-s1", "--step1", type=int, default=20)
-    parser.add_argument("-s2", "--step2", type=int, default=70)
-    parser.add_argument("-f", "--folder", default="fff")
-    parser.add_argument("-t", "--times", type=int, default=3)
+    parser.add_argument("-p1", "--parameter_1", type=int, default=60)
+    parser.add_argument("-p2", "--parameter_2", type=int, default=60)
+    parser.add_argument("-p3", "--parameter_3", type=int, default=60)
+    parser.add_argument("-it", "--iters", type=int, default=3000)
+    parser.add_argument("-s1", "--step1", type=int, default=30)
+    parser.add_argument("-s2", "--step2", type=int, default=120)
+    parser.add_argument("-f", "--folder", default="11250542")
+    parser.add_argument("-t", "--times", type=int, default=10)
     args = parser.parse_args()
     iters = args.iters
     step1 = args.step1

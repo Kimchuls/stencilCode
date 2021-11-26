@@ -1,9 +1,9 @@
-clang -O0 -g -emit-llvm -S *.c
+clang-12 -O0 -g -emit-llvm -S *.c
 
-llvm-link -S -o stencil.ll main.ll probe_heat.ll util.ll
+llvm-link-12 -S -o stencil.ll main.ll probe_heat.ll util.ll
 
-llc -O0 stencil.ll
+llc-12 -O0 stencil.ll
 
-clang -O0 -lm stencil.s -o stencil -L./exlib/ -lSZ -lzstd
+clang-12 -O0 -lm stencil.s -o stencil -L./exlib/ -lSZ -lzstd
 
 rm stencil.s main.ll probe_heat.ll util.ll

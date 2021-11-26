@@ -1,1 +1,1 @@
-python3 ./LLtest/modifying.py -op ./fff -sp ./newTestForCodingLSTM -in 3 -il 16
+python3 ./LLtest/modifying.py -op ./11250542 -sp ./newTestForCodingLSTM -in 3 -il 501

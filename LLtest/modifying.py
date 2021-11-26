@@ -43,8 +43,8 @@ def decode_mode1(fileList):
                 list2 = line.split(",")[1:-1]
                 list2 = [float(x) for x in list2]
                 list1.append(list2)
+            print(len(list1))
             list0.append(list1)
-
         standard = list0[-1]
         new_list0 = []
         for items in list0[:-1]:
@@ -94,5 +94,6 @@ if __name__ == '__main__':
     inputlength = args.inputlength
 
     items = getFileName()
-    decode_mode1(items)
     decode_tapfile(items)
+    decode_mode1(items)
+
