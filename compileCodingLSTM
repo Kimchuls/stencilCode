@@ -1,1 +1,1 @@
-python3 ./LLtest/codingLSTM.py -tri ./testForCodingLSTM/ -tro ./output/ -tei ./testForCodingLSTM/ -teo ./output/ -tem 1 -trin 1 -tein 1 -il 151 -pf 30 -pt 31 -pr 1
+python3 ./LLtest/codingLSTM.py -tri ./testForCodingLSTM/ -tro ./output/ -tei ./testForCodingLSTM/ -teo ./output/ -tem 1 -trin 1 -tein 1 -il 151 -pf 30 -pt 31 -pr 1 -in 2

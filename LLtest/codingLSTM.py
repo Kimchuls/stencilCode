@@ -45,7 +45,7 @@ def train_LSTM(fileList, noList, inputPath, outputPath):
             "SZErrorBound = ")[1].replace("\n", ""))
         readFile = open(os.path.join(inputPath, str(item) + ".txt"), "r")
         lines = readFile.readlines()
-        for iter1 in range(2):
+        for iter1 in range(injectnum):
             list1 = []
             start = int(
                 lines[2 + (outputLeng + 1) * iter1].replace("******* Injected Iters: ", "").replace(" *******\n", ""))
