@@ -40,7 +40,6 @@ void StencilProbe(double *A00, double *Anext0, int nx, int ny, int nz,
   {
     if (timeNow != step1 && timeNow != timesteps){
       step2 = timesteps - timeNow;
-      printf("%d %d %d\n",timeNow,step1,step2);
     }
     
     for (i = 0; i < nz * nx * ny; i++)

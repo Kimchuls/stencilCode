@@ -55,9 +55,9 @@ if __name__ == '__main__':
     parser.add_argument("-p2", "--parameter_2", type=int, default=10)
     parser.add_argument("-p3", "--parameter_3", type=int, default=10)
     parser.add_argument("-it", "--iters", type=int, default=150)
-    parser.add_argument("-s1", "--step1", type=int, default=15)
-    parser.add_argument("-s2", "--step2", type=int, default=75)
-    parser.add_argument("-f", "--folder", default="ansfile0")
+    parser.add_argument("-s1", "--step1", type=int, default=20)
+    parser.add_argument("-s2", "--step2", type=int, default=70)
+    parser.add_argument("-f", "--folder", default="fff")
     parser.add_argument("-t", "--times", type=int, default=3)
     args = parser.parse_args()
     iters = args.iters
