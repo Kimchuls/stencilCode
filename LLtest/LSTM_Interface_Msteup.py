@@ -3,7 +3,7 @@ import time
 import os
 import argparse
 
-import keras.backend.tensorflow_backend as KTF
+# import keras.backend.tensorflow_backend as KTF
 import numpy as np
 import tensorflow as tf
 from keras.layers import LSTM
@@ -46,12 +46,13 @@ def NormalizeMult(data):
     归一化 适用于单维和多维
     返回归一化后的数据和最大最小值
     '''
-    normalize = np.arange(2 * data.shape[1], dtype='float64')
-    normalize = normalize.reshape(data.shape[1], 2)
+    normalize = np.arange(2 * data.shape[-1], dtype='float64')
+    normalize = normalize.reshape(data.shape[-1], 2)
+    print("norm", normalize.shape)
 
-    for i in range(0, data.shape[1]):
+    for i in range(0, data.shape[-1]):
 
-        list = data[:, i]
+        list = data[:, :, i]
         listlow, listhigh = np.percentile(list, [0, 100])
 
         normalize[i, 0] = listlow
@@ -60,7 +61,8 @@ def NormalizeMult(data):
         delta = listhigh - listlow
         if delta != 0:
             for j in range(0, data.shape[0]):
-                data[j, i] = (data[j, i] - listlow) / delta
+                for k in range(0, data.shape[1]):
+                    data[j, k, i] = (data[j, k, i] - listlow) / delta
 
     return data, normalize
 
@@ -97,9 +99,9 @@ def readFile(filePath):
     return dataList
 
 
-def doLSTM(readpath, modelPathNP, modelPath,epoch):
+def doLSTM(readpath, modelPathNP, modelPath, epoch):
     data = readFile(readpath)
-    print(data.shape)
+    print("data shape", data.shape)
     data, normalize = NormalizeMult(data)
     train_X, train_Y = create_dataset(data)
     model = trainModel(train_X, train_Y, epoch)
@@ -108,10 +110,9 @@ def doLSTM(readpath, modelPathNP, modelPath,epoch):
 
 
 if __name__ == '__main__':
-    
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-e", "--epoch", type = int, default=100)
+    parser.add_argument("-e", "--epoch", type=int, default=100)
     parser.add_argument("-ip", "--inputPath", default='./')
     parser.add_argument("-op", "--outputPath", default='./')
     args = parser.parse_args()
@@ -121,7 +122,7 @@ if __name__ == '__main__':
         os.mkdir(outputPath)
     time_start = time.time()
     doLSTM(os.path.join(inputPath, "npSet_LSTM.npy"), os.path.join(
-        outputPath, "MultiSteup2.npy"), os.path.join(outputPath, "MultiSteup2.h5"),epoch)
+        outputPath, "MultiSteup2.npy"), os.path.join(outputPath, "MultiSteup2.h5"), epoch)
     time_end = time.time()
     time_c = time_end - time_start  # 运行所花时间
     print('time cost', time_c, 's')

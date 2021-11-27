@@ -1,10 +1,11 @@
+import argparse
 import math
 import time
 import os
-import parser
+import argparse
 from LSTM_Interface_Msteup import doLSTM
 
-import keras.backend.tensorflow_backend as KTF
+# import keras.backend.tensorflow_backend as KTF
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
@@ -39,6 +40,8 @@ def reshape_y_hat(y_hat, dim):
 # 多维反归一化
 def FNormalizeMult(data, normalize):
     data = np.array(data, dtype='float64')
+    # print("fnormal", data.shape, normalize.shape)
+    # exit(0)
     # 列
     for i in range(0, data.shape[1]):
         listlow = normalize[i, 0]
@@ -54,7 +57,9 @@ def FNormalizeMult(data, normalize):
 
 # 使用训练数据的归一化
 def NormalizeMultUseData(data, normalize):
-    for i in range(0, data.shape[1]):
+    # print("normal", data.shape, normalize.shape)
+    # exit(0)
+    for i in range(0, data.shape[-1]):
 
         listlow = normalize[i, 0]
         listhigh = normalize[i, 1]
@@ -62,7 +67,8 @@ def NormalizeMultUseData(data, normalize):
 
         if delta != 0:
             for j in range(0, data.shape[0]):
-                data[j, i] = (data[j, i] - listlow) / delta
+                for k in range(0, data.shape[1]):
+                    data[j, k, i] = (data[j, k, i] - listlow) / delta
 
     return data
 
@@ -89,6 +95,7 @@ def test():
     model = load_model(modelPath)
     data = NormalizeMultUseData(data, normalize)
     y_hat = model.predict(data)
+    # y_hat = y_hat.reshape(y_hat.shape[1])
     del model
     del data
     y_hat = FNormalizeMult(y_hat, normalize)
@@ -148,13 +155,13 @@ def getAllFileName(origin):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("-e", "--epoch", type = int, default=100)
+    parser.add_argument("-e", "--epoch", type=int, default=100)
     parser.add_argument("-ip", "--inputPath", default='./')
     parser.add_argument("-op", "--outputPath", default='./')
     parser.add_argument(
-        "-t", "--train", type = int, help="whether training LSTM, 0 for train, 1 for not train",  default=1)
+        "-t", "--train", type=int, help="whether training LSTM, 0 for train, 1 for not train",  default=1)
     parser.add_argument(
-        "-tm", "--testMode", type = int, help="test mode for LSTM, 0 for single test file, 1 for multiple test files",  default=0)
+        "-tm", "--testMode", type=int, help="test mode for LSTM, 0 for single test file, 1 for multiple test files",  default=0)
     parser.add_argument("-tenum", "--testNumber", type=int,
                         nargs='+', help="input file no,  -x=random x")
     args = parser.parse_args()
@@ -165,7 +172,7 @@ if __name__ == '__main__':
     modelPathNP = os.path.join(inputPath, "MultiSteup2.npy")
     modelPath = os.path.join(inputPath, "MultiSteup2.h5")
     if trainMode == 0:
-        doLSTM(trainDataPath, modelPathNP, modelPath,epoch)
+        doLSTM(trainDataPath, modelPathNP, modelPath, epoch)
 
     if testMode == 0:
         testDataPath = os.path.join(inputPath, "npSet_LSTM-1.npy")
@@ -176,8 +183,12 @@ if __name__ == '__main__':
     else:
         items = getAllFileName(inputPath)
         for item in items:
-            testDataPath = os.path.join(inputPath, "npSet_LSTM_{0}-1.npy".format(item))
-            GTPath = os.path.join(inputPath, "anslist_LSTM_{0}.txt".format(item))
-            lossPath = os.path.join(outputPath, "loss_LSTM_{0}.txt".format(item))
-            imagePath = os.path.join(outputPath, "loss_LSTM_image_{0}.png".format(item))
+            testDataPath = os.path.join(
+                inputPath, "npSet_LSTM_{0}-1.npy".format(item))
+            GTPath = os.path.join(
+                inputPath, "anslist_LSTM_{0}.txt".format(item))
+            lossPath = os.path.join(
+                outputPath, "loss_LSTM_{0}.txt".format(item))
+            imagePath = os.path.join(
+                outputPath, "loss_LSTM_image_{0}.png".format(item))
             test()
