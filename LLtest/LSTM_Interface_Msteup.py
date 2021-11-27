@@ -1,5 +1,7 @@
 import random
 import time
+import os
+import argparse
 
 import keras.backend.tensorflow_backend as KTF
 import numpy as np
@@ -13,6 +15,11 @@ config = tf.ConfigProto()
 config.gpu_options.allow_growth = True
 session = tf.Session(config=config)
 KTF.set_session(session)
+
+# config = tf.compat.v1.ConfigProto()
+# config.gpu_options.allow_growth = True
+# session = tf.compat.v1.Session(config=config)
+# tf.compat.v1.keras.backend.set_session(session)
 
 
 def create_dataset(data):
@@ -65,7 +72,8 @@ def trainModel(train_X, train_Y, epoch):
     print(train_X.shape, train_Y.shape)
     model = Sequential()
     # model.add(LSTM(output_dim=128, activation='sigmoid', inner_activation='hard_sigmoid')) #single layer LSTM
-    model.add(LSTM(140, input_shape=(train_X.shape[1], train_X.shape[2]), return_sequences=True))
+    model.add(LSTM(140, input_shape=(
+        train_X.shape[1], train_X.shape[2]), return_sequences=True))
     model.add(Dropout(0.2))
     model.add(LSTM(140, return_sequences=True))
     model.add(Dropout(0.2))
@@ -89,39 +97,29 @@ def readFile(filePath):
     return dataList
 
 
-def doLSTM(readpath, modelpathNP,modelpath):
+def doLSTM(readpath, modelPathNP, modelPath):
     data = readFile(readpath)
+    print(data.shape)
     data, normalize = NormalizeMult(data)
     train_X, train_Y = create_dataset(data)
     model = trainModel(train_X, train_Y, 500)
-    np.save(modelpathNP, normalize)
-    model.save(modelpath)
+    np.save(modelPathNP, normalize)
+    model.save(modelPath)
 
 
 if __name__ == '__main__':
-    import argparse
+    
 
     parser = argparse.ArgumentParser()
     parser.add_argument("-e", "--epoch", default=500)
+    parser.add_argument("-ip", "--inputPath", default='./')
+    parser.add_argument("-op", "--outputPath", default='./')
     args = parser.parse_args()
 
+    epoch, inputPath, outputPath = args.epoch, args.inputPath, args.outputPath
     time_start = time.time()
-    data = readFile("./path/npSet_LSTM_0.npy")
-    # print(np.array(data).shape)
-    print(data.shape)
-    # 归一化的加入
-
-    # data, normalize = NormalizeMult(data)
-    train_X, train_Y = create_dataset(data)
-    # print(train_X.shape)
-    # print(train_X.shape)
-    # exit(0)
-    model = trainModel(train_X, train_Y, int(args.epoch))
-
-    # np.save("./MultiSteup2.npy", normalize)
-
-    model.save("./MultiSteup2.h5")
-
+    doLSTM(os.path.join(inputPath, "npSet_LSTM_0.npy"), os.path.join(
+        outputPath, "./MultiSteup2.npy"), os.path.join(outputPath, "./MultiSteup2.h5"))
     time_end = time.time()
     time_c = time_end - time_start  # 运行所花时间
     print('time cost', time_c, 's')

@@ -39,7 +39,7 @@ void StencilProbe(double *A00, double *Anext0, int nx, int ny, int nz,
   for (timeNow = step1; timeNow <= timesteps; timeNow += step2)
   {
     if (timeNow != step1 && timeNow != timesteps){
-      step2 = timesteps - timeNow;
+      step2 = timesteps - timeNow+1;
     }
     
     for (i = 0; i < nz * nx * ny; i++)
