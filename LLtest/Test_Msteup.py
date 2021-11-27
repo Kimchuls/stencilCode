@@ -2,7 +2,7 @@ import math
 import time
 import os
 import parser
-from LLtest.LSTM_Interface_Msteup import doLSTM
+from LSTM_Interface_Msteup import doLSTM
 
 import keras.backend.tensorflow_backend as KTF
 import matplotlib.pyplot as plt
@@ -12,10 +12,15 @@ from LSTM_Interface_Msteup import *
 from keras.models import load_model
 
 # 设定为自增长
-config = tf.ConfigProto()
+# config = tf.ConfigProto()
+# config.gpu_options.allow_growth = True
+# session = tf.Session(config=config)
+# KTF.set_session(session)
+
+config = tf.compat.v1.ConfigProto()
 config.gpu_options.allow_growth = True
-session = tf.Session(config=config)
-KTF.set_session(session)
+session = tf.compat.v1.Session(config=config)
+tf.compat.v1.keras.backend.set_session(session)
 
 
 def reshape_y_hat(y_hat, dim):
@@ -143,26 +148,31 @@ def getAllFileName(origin):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("-e", "--epoch", default=500)
+    parser.add_argument("-e", "--epoch", type = int, default=100)
     parser.add_argument("-ip", "--inputPath", default='./')
     parser.add_argument("-op", "--outputPath", default='./')
     parser.add_argument(
-        "-tm", "--testMode", help="test mode for LSTM, 0 for single train, 1 for multiple trains",  default='./')
+        "-t", "--train", type = int, help="whether training LSTM, 0 for train, 1 for not train",  default=1)
+    parser.add_argument(
+        "-tm", "--testMode", type = int, help="test mode for LSTM, 0 for single test file, 1 for multiple test files",  default=0)
     parser.add_argument("-tenum", "--testNumber", type=int,
                         nargs='+', help="input file no,  -x=random x")
     args = parser.parse_args()
-    epoch, inputPath, outputPath, testMode, testNumber = args.epoch, args.inputPath, args.outputPath, args.testMode, args.testNumber
+    epoch, inputPath, outputPath, testMode, testNumber, trainMode = args.epoch, args.inputPath, args.outputPath, args.testMode, args.testNumber, args.train
+    if not os.path.exists(outputPath):
+        os.mkdir(outputPath)
     trainDataPath = os.path.join(inputPath, "npSet_LSTM.npy")
     modelPathNP = os.path.join(inputPath, "MultiSteup2.npy")
     modelPath = os.path.join(inputPath, "MultiSteup2.h5")
-    doLSTM(trainDataPath, modelPathNP, modelPath)
+    if trainMode == 0:
+        doLSTM(trainDataPath, modelPathNP, modelPath,epoch)
 
     if testMode == 0:
         testDataPath = os.path.join(inputPath, "npSet_LSTM-1.npy")
         GTPath = os.path.join(inputPath, "anslist_LSTM.txt")
         lossPath = os.path.join(outputPath, "loss_LSTM.txt")
         imagePath = os.path.join(outputPath, "loss_LSTM_image.png")
-        test(testDataPath)
+        test()
     else:
         items = getAllFileName(inputPath)
         for item in items:
@@ -170,4 +180,4 @@ if __name__ == '__main__':
             GTPath = os.path.join(inputPath, "anslist_LSTM_{0}.txt".format(item))
             lossPath = os.path.join(outputPath, "loss_LSTM_{0}.txt".format(item))
             imagePath = os.path.join(outputPath, "loss_LSTM_image_{0}.png".format(item))
-            test(testDataPath)
+            test()

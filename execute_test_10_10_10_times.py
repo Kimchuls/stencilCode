@@ -54,7 +54,7 @@ if __name__ == '__main__':
     parser.add_argument("-p1", "--parameter_1", type=int, default=60)
     parser.add_argument("-p2", "--parameter_2", type=int, default=60)
     parser.add_argument("-p3", "--parameter_3", type=int, default=60)
-    parser.add_argument("-it", "--iters", type=int, default=3000)
+    parser.add_argument("-it", "--iters", type=int, default=1000)
     parser.add_argument("-s1", "--step1", type=int, default=30)
     parser.add_argument("-s2", "--step2", type=int, default=120)
     parser.add_argument("-f", "--folder", default="11250542")

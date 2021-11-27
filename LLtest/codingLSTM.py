@@ -65,6 +65,8 @@ def train_LSTM(fileList, noList, inputPath, outputPath):
                 # exit(0)
                 dataSet.append(item_dataSet)
             break
+        print(len(dataSet))
+        
     npSet = np.array(dataSet)
     np.save(os.path.join(outputPath, "npSet_LSTM.npy"), npSet)
     print(npSet.shape)

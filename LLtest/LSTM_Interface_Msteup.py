@@ -11,15 +11,15 @@ from keras.layers.core import Dense, Activation, Dropout
 from keras.models import Sequential
 
 # 设定为自增长
-config = tf.ConfigProto()
-config.gpu_options.allow_growth = True
-session = tf.Session(config=config)
-KTF.set_session(session)
-
-# config = tf.compat.v1.ConfigProto()
+# config = tf.ConfigProto()
 # config.gpu_options.allow_growth = True
-# session = tf.compat.v1.Session(config=config)
-# tf.compat.v1.keras.backend.set_session(session)
+# session = tf.Session(config=config)
+# KTF.set_session(session)
+
+config = tf.compat.v1.ConfigProto()
+config.gpu_options.allow_growth = True
+session = tf.compat.v1.Session(config=config)
+tf.compat.v1.keras.backend.set_session(session)
 
 
 def create_dataset(data):
@@ -97,12 +97,12 @@ def readFile(filePath):
     return dataList
 
 
-def doLSTM(readpath, modelPathNP, modelPath):
+def doLSTM(readpath, modelPathNP, modelPath,epoch):
     data = readFile(readpath)
     print(data.shape)
     data, normalize = NormalizeMult(data)
     train_X, train_Y = create_dataset(data)
-    model = trainModel(train_X, train_Y, 500)
+    model = trainModel(train_X, train_Y, epoch)
     np.save(modelPathNP, normalize)
     model.save(modelPath)
 
@@ -111,15 +111,17 @@ if __name__ == '__main__':
     
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-e", "--epoch", default=500)
+    parser.add_argument("-e", "--epoch", type = int, default=100)
     parser.add_argument("-ip", "--inputPath", default='./')
     parser.add_argument("-op", "--outputPath", default='./')
     args = parser.parse_args()
 
     epoch, inputPath, outputPath = args.epoch, args.inputPath, args.outputPath
+    if not os.path.exists(outputPath):
+        os.mkdir(outputPath)
     time_start = time.time()
-    doLSTM(os.path.join(inputPath, "npSet_LSTM_0.npy"), os.path.join(
-        outputPath, "./MultiSteup2.npy"), os.path.join(outputPath, "./MultiSteup2.h5"))
+    doLSTM(os.path.join(inputPath, "npSet_LSTM.npy"), os.path.join(
+        outputPath, "MultiSteup2.npy"), os.path.join(outputPath, "MultiSteup2.h5"),epoch)
     time_end = time.time()
     time_c = time_end - time_start  # 运行所花时间
     print('time cost', time_c, 's')
