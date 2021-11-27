@@ -114,11 +114,11 @@ def test():
     del GTLines, GTFile
 
     errLine, errAll = [], 0.0
+    plt.figure()
     # enum, errList = 0, []
     lossFile = open(lossPath, 'w')  # test数据 每条iteration对应MSE
     for (line1, line2) in zip(yList, GTList):
         err = 0.0
-        plt.figure()
         for (item1, item2) in zip(line1, line2):
             if item2 != 0:
                 loss = (item1 - item2) / item2
@@ -136,7 +136,7 @@ def test():
     plt.plot(errLine)  # test数据 每条iteration对应MSE 变化图
     plt.savefig(imagePath)
     plt.close()
-    lossFile.write("The sum of all errors is: ", str(err) + '\n')
+    lossFile.write("The sum of all errors is: " + str(errAll) + '\n')
     lossFile.close()
     end = time.time()
     print(end - start)
@@ -156,8 +156,8 @@ def getAllFileName(origin):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("-e", "--epoch", type=int, default=100)
-    parser.add_argument("-ip", "--inputPath", default='./')
-    parser.add_argument("-op", "--outputPath", default='./')
+    parser.add_argument("-ip", "--inputPath", default='../outputfff')
+    parser.add_argument("-op", "--outputPath", default='../answerfff')
     parser.add_argument(
         "-t", "--train", type=int, help="whether training LSTM, 0 for train, 1 for not train",  default=1)
     parser.add_argument(
